@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maison Solstice | Paris</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #F9F8F6;
+            --text-color: #2D2926;
+            --accent-color: #B5A172;
+            --accent-light: #E0D5B8;
+            --stone-grey: #E8E6E1;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+            --easing: cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Texture Overlay */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Typography Utility */
+        h1, h2, h3, h4 {
+            font-family: var(--font-display);
+            font-weight: 400;
+            line-height: 1.1;
+        }
+
+        .display-text {
+            font-size: clamp(3rem, 8vw, 6rem);
+            letter-spacing: -0.02em;
+        }
+
+        .display-italic {
+            font-style: italic;
+            color: var(--accent-color);
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-color);
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        p {
+            font-weight: 300;
+            font-size: 1.05rem;
+            color: #4a4a4a;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        /* Layout Utility */
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 2rem;
+        }
+
+        section {
+            padding: 8rem 0;
+            position: relative;
+        }
+
+        /* Navigation */
+        nav {
+            padding: 2.5rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            mix-blend-mode: multiply;
+            transition: transform 0.4s ease;
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .nav-item {
+            font-size: 0.9rem;
+            font-weight: 500;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: var(--accent-color);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s var(--easing);
+        }
+
+        .nav-item:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* Hero Section - Editorial Style */
+        .hero {
+            min-height: 100vh;
+            padding-top: 12rem;
+            align-items: flex-start;
+        }
+
+        .hero-text {
+            grid-column: 1 / 7;
+            z-index: 2;
+            align-self: center;
+        }
+
+        .hero-image-wrapper {
+            grid-column: 7 / 13;
+            position: relative;
+            height: 80vh;
+            overflow: hidden;
+        }
+
+        .hero-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.1);
+            transition: transform 2s var(--easing);
+        }
+
+        .hero-caption {
+            position: absolute;
+            bottom: 2rem;
+            left: -3rem;
+            background: var(--bg-color);
+            padding: 1.5rem;
+            max-width: 250px;
+            font-size: 0.8rem;
+            border-left: 2px solid var(--accent-color);
+        }
+
+        /* Philosophy Section - Text Heavy */
+        .philosophy {
+            background-color: #F5F3EF;
+        }
+
+        .phil-grid {
+            align-items: center;
+        }
+
+        .phil-content {
+            grid-column: 3 / 8;
+        }
+
+        .phil-content p {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            font-family: var(--font-display);
+        }
+
+        .phil-highlight {
+            color: var(--accent-color);
+            font-style: italic;
+        }
+
+        .phil-detail {
+            grid-column: 9 / 12;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--text-color);
+            padding-top: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Menu Section - Rail/Ticket */
+        .menu-section {
+            padding: 10rem 0;
+        }
+
+        .menu-header {
+            grid-column: 2 / 5;
+            position: sticky;
+            top: 10rem;
+            height: fit-content;
+        }
+
+        .menu-list {
+            grid-column: 6 / 12;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--stone-grey);
+            transition: border-color 0.3s ease, padding-left 0.3s ease;
+        }
+
+        .menu-item:hover {
+            border-color: var(--accent-color);
+            padding-left: 1rem;
+        }
+
+        .menu-name {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+        }
+
+        .menu-price {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--accent-color);
+        }
+
+        .menu-desc {
+            display: block;
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 0.5rem;
+            max-width: 80%;
+        }
+
+        /* Visual Interlude */
+        .interlude {
+            padding: 0;
+            height: 70vh;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .interlude-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            filter: grayscale(20%) sepia(10%);
+        }
+
+        .interlude-text {
+            position: relative;
+            z-index: 2;
+            color: white;
+            text-align: center;
+            mix-blend-mode: soft-light;
+        }
+
+        /* Location/Info */
+        .info {
+            padding-bottom: 6rem;
+        }
+
+        .info-card {
+            grid-column: 2 / 7;
+            background: white;
+            padding: 4rem;
+            border: 1px solid var(--stone-grey);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.02);
+        }
+
+        .info-image {
+            grid-column: 8 / 12;
+            height: 100%;
+            min-height: 400px;
+        }
+
+        .info-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            border: 1px solid var(--text-color);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.4s var(--easing);
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: var(--text-color);
+            color: white;
+            border-color: var(--text-color);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-color);
+            color: var(--bg-color);
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            display: block;
+            color: var(--accent-color);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-bottom: 4rem;
+        }
+
+        /* Animation States */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease, transform 1s var(--easing);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay {
+            transition-delay: 0.2s;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero {
+                padding-top: 8rem;
+                display: block;
+            }
+
+            .hero-text {
+                grid-column: 1 / -1;
+                margin-bottom: 2rem;
+            }
+
+            .hero-image-wrapper {
+                grid-column: 1 / -1;
+                height: 50vh;
+            }
+
+            .hero-caption {
+                position: relative;
+                bottom: auto;
+                left: auto;
+                margin-top: 1rem;
+                border-left: none;
+                border-top: 2px solid var(--accent-color);
+            }
+
+            .phil-content, .phil-detail, .menu-header, .menu-list, .info-card, .info-image {
+                grid-column: 1 / -1;
+            }
+
+            .menu-header {
+                position: relative;
+                top: 0;
+                margin-bottom: 3rem;
+            }
+
+            .display-text {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+
+    <nav>
+        <div class="container nav-inner">
+            <a href="#" class="logo">Maison Solstice</a>
+            <div class="nav-links">
+                <span class="nav-item">Philosophy</span>
+                <span class="nav-item">Menu</span>
+                <span class="nav-item">Visit</span>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero container grid">
+        <div class="hero-text reveal">
+            <span class="subtitle">Paris 3e · Le Marais</span>
+            <h1 class="display-text">
+                Coffee as a <br>
+                <span class="display-italic">quiet ritual</span>
+                in the morning light.
+            </h1>
+        </div>
+        <div class="hero-image-wrapper reveal reveal-delay">
+            <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2071&auto=format&fit=crop" alt="Latte art on stone table" class="hero-img">
+            <div class="hero-caption">
+                <p><strong>08:00 AM</strong> — The grind, the tamp, the pour. An exercise in daily precision.</p>
+            </div>
+        </div>
+    </header>
+
+    <section class="philosophy">
+        <div class="container grid phil-grid">
+            <div class="phil-content reveal">
+                <p>We believe the city is too loud. Maison Solstice is an architectural pause; a sanctuary of honed limestone and <span class="phil-highlight">brushed brass</span> where time slows down. We source single-origin beans from micro-lots and roast them lightly to preserve the terroir.</p>
+            </div>
+            <div class="phil-detail reveal reveal-delay">
+                <p>Designed by Studio L'Aube.<br>Inspired by the Haussmannian geometry of the quarter.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="menu-section container grid">
+        <div class="menu-header reveal">
+            <span class="subtitle">La Carte</span>
+            <h2>Curated<br>Selections</h2>
+            <p style="margin-top: 1rem; opacity: 0.6;">Subject to daily change<br>based on weather & mood.</p>
+        </div>
+        <div class="menu-list">
+            <div class="menu-item reveal">
+                <div>
+                    <span class="menu-name">Espresso No. 3</span>
+                    <span class="menu-desc">Notes of jasmine, bergamot, and honey.</span>
+                </div>
+                <span class="menu-price">€3.50</span>
+            </div>
+            <div class="menu-item reveal">
+                <div>
+                    <span class="menu-name">Flat White</span>
+                    <span class="menu-desc">Silky microfoam, double ristretto base.</span>
+                </div>
+                <span class="menu-price">€5.00</span>
+            </div>
+            <div class="menu-item reveal">
+                <div>
+                    <span class="menu-name">V60 Pour Over</span>
+                    <span class="menu-desc">Hand-poured slow extraction. Ethiopian Yirgacheffe.</span>
+                </div>
+                <span class="menu-price">€7.00</span>
+            </div>
+            <div class="menu-item reveal">
+                <div>
+                    <span class="menu-name">Matcha Ceremonial</span>
+                    <span class="menu-desc">Kyoto sourced, whisked to order.</span>
+                </div>
+                <span class="menu-price">€6.50</span>
+            </div>
+            <div class="menu-item reveal">
+                <div>
+                    <span class="menu-name">Pain au Chocolat</span>
+                    <span class="menu-desc">AOP Butter, 70% dark Valrhona chocolate.</span>
+                </div>
+                <span class="menu-price">€3.00</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="interlude reveal">
+        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2047&auto=format&fit=crop" alt="Parisian Cafe Sunlight" class="interlude-img">
+        <h2 class="display-text interlude-text">Stillness is a luxury.</h2>
+    </section>
+
+    <section class="info container grid">
+        <div class="info-card reveal">
+            <span class="subtitle">Visit Us</span>
+            <h3>Rue des Rosiers</h3>
+            <p style="margin-top: 1rem;">14 Rue des Rosiers<br>75004 Paris, France</p>
+            <br>
+            <p><strong>Open Daily</strong><br>08:00 – 18:00</p>
+            <button class="btn">Get Directions</button>
+        </div>
+        <div class="info-image reveal reveal-delay">
+            <img src="https://images.unsplash.com/photo-1509762774605-f07212a245b0?q=80&w=2070&auto=format&fit=crop" alt="Coffee beans detail">
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <span class="footer-logo">Maison Solstice</span>
+            <div class="footer-links">
+                <a href="#">Instagram</a>
+                <a href="#">Newsletter</a>
+                <a href="#">Legal</a>
+            </div>
+            <p style="opacity: 0.3; font-size: 0.7rem;">&copy; 2024 Maison Solstice Paris.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Micro-interaction: Scroll Reveal
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Micro-interaction: Parallax/Scale on Hero
+        const heroImg = document.querySelector('.hero-img');
+        window.addEventListener('scroll', () => {
+            const scroll = window.scrollY;
+            if (scroll < 800) {
+                heroImg.style.transform = `scale(${1.1 - (scroll * 0.0001)}) translateY(${scroll * 0.05}px)`;
+            }
+        });
+
+        // Micro-interaction: Nav visibility
+        let lastScroll = 0;
+        const nav = document.querySelector('nav');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.scrollY;
+            if (currentScroll > lastScroll && currentScroll > 100) {
+                nav.style.transform = 'translateY(-100%)';
+            } else {
+                nav.style.transform = 'translateY(0)';
+            }
+            lastScroll = currentScroll;
+        });
+
+    </script>
+
+<script>
+  let inspectorMode = false;
+  let hoveredElement = null;
+  let selectedElement = null;
+  
+  window.addEventListener('message', (event) => {
+    if (event.data?.type === 'SET_INSPECTOR_MODE') {
+      inspectorMode = event.data.enabled;
+      document.body.style.cursor = inspectorMode ? 'crosshair' : 'default';
+    }
+    
+    if (event.data?.type === 'LOCAL_UPDATE' && selectedElement) {
+      const update = event.data.update;
+      
+      if (update.text !== undefined) {
+        selectedElement.innerText = update.text;
+      }
+      
+      if (update.styles) {
+        Object.entries(update.styles).forEach(([prop, value]) => {
+          selectedElement.style[prop] = value;
+        });
+      }
+    }
+  });
+  
+  document.addEventListener('mouseover', (e) => {
+    if (!inspectorMode) return;
+    if (hoveredElement && hoveredElement !== selectedElement) {
+      hoveredElement.style.outline = '';
+    }
+    hoveredElement = e.target;
+    if (hoveredElement !== selectedElement) {
+      hoveredElement.style.outline = '2px solid #06b6d4';
+    }
+  });
+  
+  document.addEventListener('mouseout', (e) => {
+    if (!inspectorMode || !hoveredElement) return;
+    if (hoveredElement !== selectedElement) {
+      hoveredElement.style.outline = '';
+    }
+  });
+  
+  document.addEventListener('click', (e) => {
+    if (!inspectorMode) return;
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (selectedElement) {
+      selectedElement.style.outline = '';
+    }
+    
+    const el = e.target;
+    selectedElement = el;
+    el.style.outline = '3px solid #06b6d4';
+    
+    const rect = el.getBoundingClientRect();
+    const styles = window.getComputedStyle(el);
+    
+    window.parent.postMessage({
+      type: 'ELEMENT_SELECTED',
+      element: {
+        tagName: el.tagName.toLowerCase(),
+        text: el.innerText?.substring(0, 500) || '',
+        className: el.className || '',
+        styles: {
+          color: styles.color,
+          backgroundColor: styles.backgroundColor,
+          fontSize: styles.fontSize,
+          fontWeight: styles.fontWeight,
+          padding: styles.padding,
+          margin: styles.margin,
+        },
+        rect: {
+          top: rect.top,
+          left: rect.left,
+          width: rect.width,
+          height: rect.height,
+        },
+        selector: el.id ? '#' + el.id : (el.className ? '.' + el.className.split(' ')[0] : el.tagName.toLowerCase())
+      }
+    }, '*');
+  }, true);
+</script>
+</body>
+</html>
